@@ -1,0 +1,46 @@
+[
+  {
+    "id": " ",
+    "title": " ",
+    "description": " ",
+    "code": " ",
+    "price": " ",
+    "status": " ",
+    "stock": " ",
+    "category": " ",
+    "thumbnails": " "
+  },
+  {
+    "id": 2,
+    "title": "Jean Slim",
+    "description": "Jean negro slim fit",
+    "code": "JN001",
+    "price": 100,
+    "status": true,
+    "stock": 20,
+    "category": "jeans",
+    "thumbnails": "img1.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Jean Slim",
+    "description": "Jean azulnegro slim fit",
+    "code": "JN002",
+    "price": 80,
+    "status": true,
+    "stock": 15,
+    "category": "jeans",
+    "thumbnails": "img1.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Jean Slim",
+    "description": "Jean negro slim fit",
+    "code": "JN003",
+    "price": 80,
+    "status": true,
+    "stock": 15,
+    "category": "jeans",
+    "thumbnails": "img1.jpg"
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "name": "entregable.backend1.santiagoramirez",
+  "version": "1.0.0",
+  "description": "Entrega 1 del proyecto express, donde se programa una API en JS con dos clases ProductManager y CartManager, que nos ayudan a crear un CRUD en un archivo JSON y ver los resultados en POSTMAN",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zanti82/Entregable.Backend1.SantiagoRamirez.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/zanti82/Entregable.Backend1.SantiagoRamirez/issues"
+  },
+  "homepage": "https://github.com/zanti82/Entregable.Backend1.SantiagoRamirez#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

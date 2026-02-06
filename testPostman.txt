@@ -1,0 +1,9 @@
+
+  "title": "Jean Slim",
+  "description": "Jean azul slim fit",
+  "code": "JN001",
+  "price": 80,
+  "status": true,
+  "stock": 15,
+  "category": "jeans",
+  "thumbnails": "img1.jpg"
