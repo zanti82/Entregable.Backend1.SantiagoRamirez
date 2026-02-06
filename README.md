@@ -22,6 +22,6 @@ src/
 
 El servidor debe estar basado en Node.js y Express, y debe escuchar en el puerto 8080 . Se deben disponer dos grupos de rutas: /products y /carts
 
-
+SE CREA EL .GITIGNORE PARA NO SUBIR MODULE AL REPOSITORIO
 
 
