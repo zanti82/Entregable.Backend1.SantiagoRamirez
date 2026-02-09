@@ -34,10 +34,10 @@
   },
   {
     "id": 4,
-    "title": "Jean Slim",
-    "description": "Jean negro slim fit",
+    "title": "Jean Slim cambio recto",
+    "description": "Jean recto slim fit",
     "code": "JN003",
-    "price": 80,
+    "price": 100,
     "status": true,
     "stock": 15,
     "category": "jeans",

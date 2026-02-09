@@ -28,10 +28,10 @@ export default class ProductManager {
   }
 
   async escribirData(data) {
-    await fs.promises.writeFile(
-      this.path,
-      JSON.stringify(data, null, 2)
-    );
+    const saveData = JSON.stringify(data, null, 2);
+    
+        await fs.promises.writeFile(
+          this.path,saveData);
   }
 
   async getProducts() {
@@ -49,7 +49,19 @@ export default class ProductManager {
 
  async addProduct(data){
 
-    //destructuramos lo que llega
+    
+       const title = data.title;
+       const description = data.description;
+       const code = data.code;
+       const price = data.price;
+       const status = data.status;
+       const stock = data.stock;
+       const category = data.category;
+       const thumbnails = data.thumbnails;
+  
+
+
+    /*destructuramos lo que llega
 
     const {
         title,
@@ -61,17 +73,11 @@ export default class ProductManager {
         category,
         thumbnails
       } = data;
+ */
 
       // validamos que lleguen los datos
-      if (
-        title === undefined ||
-        description === undefined ||
-        code === undefined ||
-        price === undefined ||
-        status === undefined ||
-        stock === undefined ||
-        category === undefined ||
-        thumbnails === undefined
+      if ( title === undefined || description === undefined || code === undefined || price === undefined ||
+        status === undefined || stock === undefined || category === undefined ||  thumbnails === undefined
       ) {
         throw new Error("Todos los campos son obligatorios");
       }
@@ -113,7 +119,7 @@ export default class ProductManager {
   return newProduct;
   }
 
-// METODO PUT 
+// METODO PUT update
 
   async updateProduct(pid, updateData) {
     const products = await this.leerData();
@@ -123,7 +129,25 @@ export default class ProductManager {
       return null;
     }
 
-    //destructuramos sin el id, esto lo tome de la IA que lo recoemndo
+    /*
+    const jsonProduct = products[index];
+
+    const updatedProduct = {
+        id: jsonProduct.id, // El ID se queda igual pase lo que pase
+        title: updateData.title !== undefined ? updateData.title : jsonProduct.title,
+        description: updateData.description !== undefined ? updateData.description : jsonProduct.description,
+        code: updateData.code !== undefined ? updateData.code : jsonProduct.code,
+        price: updateData.price !== undefined ? updateData.price : jsonProduct.price,
+        status: updateData.status !== undefined ? updateData.status : jsonProduct.status,
+        stock: updateData.stock !== undefined ? updateData.stock : jsonProduct.stock,
+        category: updateData.category !== undefined ? updateData.category : jsonProduct.category,
+        thumbnails: updateData.thumbnails !== undefined ? updateData.thumbnails : jsonProduct.thumbnails
+    };
+
+    products[index] = updatedProduct;
+    */
+
+    //destructuramos sin el id, usando el objeto rest
     const { id, ...rest } = updateData;
 
     products[index] = {
