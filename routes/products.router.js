@@ -4,9 +4,9 @@ import ProductManager from "../managers/ProductManager.js";
 const router = Router();
 const productManager = new ProductManager("./data/products.json");
 
-/**
- * GET /api/products
- * Lista todos los productos
+/*
+  GET /api/products
+  Lista todos los productos
  */
 router.get("/", async (req, res) => {
   try {
@@ -17,9 +17,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-/**
- * GET /api/products/:pid
- * Obtiene un producto por ID
+/*
+  GET /api/products/:pid
+ Obtiene un producto por ID
  */
 router.get("/:pid", async (req, res) => {
   const pid = Number(req.params.pid);
@@ -37,9 +37,9 @@ router.get("/:pid", async (req, res) => {
   }
 });
 
-/**
- * POST /api/products
- * Crea un nuevo producto
+/*
+  POST /api/products
+  Crea un nuevo producto
  */
 router.post("/", async (req, res) => {
   try {
@@ -50,9 +50,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-/**
- * PUT /api/products/:pid
- * Actualiza un producto
+/*
+  PUT /api/products/:pid
+ Actualiza un producto
  */
 router.put("/:pid", async (req, res) => {
   const pid = Number(req.params.pid);
@@ -70,9 +70,9 @@ router.put("/:pid", async (req, res) => {
   }
 });
 
-/**
- * DELETE /api/products/:pid
- * Elimina un producto
+/*
+  DELETE /api/products/:pid
+  Elimina un producto
  */
 router.delete("/:pid", async (req, res) => {
   const pid = Number(req.params.pid);
