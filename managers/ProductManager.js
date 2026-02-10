@@ -17,12 +17,12 @@ export default class ProductManager {
   async leerData(){
     try {
         const data = await fs.promises.readFile(this.path, "utf-8");
-        return JSON.parse(data)
+        return JSON.parse(data);
         
     } catch (error) {
          
-        return [];
-        // el manejo de errores lo hacemos en el router
+          return [];
+          // el manejo de errores lo hacemos en el router
         
     }
   }
@@ -144,7 +144,7 @@ export default class ProductManager {
         thumbnails: updateData.thumbnails !== undefined ? updateData.thumbnails : jsonProduct.thumbnails
     };
 
-    products[index] = updatedProduct;
+products[index] = updatedProduct;
     */
 
     //destructuramos sin el id, usando el objeto rest
