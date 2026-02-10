@@ -10,7 +10,7 @@ POST crear cart
 */
 router.post("/", async (req, res) => {
     try {
-      const newProduct = await cartManager.crearCart(req.body);
+      const newCart = await cartManager.crearCart(req.body);
       res.status(201).json(newCart);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -21,10 +21,18 @@ router.post("/", async (req, res) => {
   /*
 PUT adicionar producto al cart
 */
-router.post("/", async (req, res) => {
+router.put("/:cartID/products/:pId", async (req, res) => {
+
+
     try {
-      const cart = await cartManager.addProductsCart(req.body);
-      res.status(201).json(cart);
+      const { cartID, pId } = req.params;
+      const { quantity } = req.body;
+
+      const updatedCart = await cartManager.addProductsCart(Number(cartID), pId,quantity);
+      res.status(200).json(updatedCart);
+
+      console.log(updatedCart)
+      
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

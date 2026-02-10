@@ -34,7 +34,7 @@ export default class CartManager{
     }
 
     //creacion de un cart
-    async crearCart(Cart){
+    async crearCart(){
 
         const carts = await this.leerData();
 
@@ -43,7 +43,7 @@ export default class CartManager{
         if(carts.length === 0){
            newId = 1
         }else{
-            newId = length(carts)+1;
+            newId = carts.length + 1;
         }
 
 
@@ -64,11 +64,13 @@ export default class CartManager{
 
     // anexar productos al cart
 
-    async addProductsCart(idCart, pid){
+    async addProductsCart(idCart, pid, cantidad){
         //revisar que el cart exista
 
         const  carts = await this.leerData();
-        const cartIndex = carts.findIndex(c => c.idCart=== idCart);
+        const cartIndex = carts.findIndex(c => c.id === idCart);
+
+        console.log(carts)
 
         if (cartIndex === -1){
 
@@ -81,27 +83,27 @@ export default class CartManager{
 
         //revisar que el producto exista
 
-        const productIndex = cart.products.findIndex(p => p.product === pid);
+        const productIndex = cart.products.findIndex(p => p.id === pid);
 
          
         if(productIndex === -1){
 
              // adiiconar el prod al cart
-            cart.product.push({
+            cart.products.push({
                 product: pid,
-                cantidad : 1
+                cantidad : cantidad || 1
             })
 
         }else{
              // revisa si el prod existe , prud ++
 
-            cart.product[productIndex].cantidad++
+            cart.products[productIndex].cantidad += (cantidad || 1)
 
         }
 
         carts[cartIndex] = cart;
         // guardar cart
-        await this.writeFile(carts);
+        await this.escribirData(carts);
     
         return cart;      
 
@@ -113,7 +115,7 @@ export default class CartManager{
     async getCart(idCart){
 
         const carts = await this.leerData();
-        const cartExist = carts.find ( c => c.idCart === idCart );
+        const cartExist = carts.find ( c => c.id === idCart );
 
         if(cartExist){
             return cartExist
