@@ -1,9 +1,15 @@
 //renderizar los productos
 
-router.get("/", async (req,res)=>{
+import { Router } from "express"
 
-    const products = await productManager.getProducts()
-   
-    res.render("index", { products })
-   
-   })
+const router = Router()
+
+router.get("/", (req,res)=>{
+    res.render("index")
+})
+
+router.get("/realtimeproducts",(req,res)=>{
+    res.render("realTimeProducts")
+})
+
+export default router

@@ -5,6 +5,9 @@ import handlebars from "express-handlebars";
 import multer from "multer";
 import path from "path";
 import { Server } from "socket.io"
+import viewsRouter from "./routes/views.router.js"
+
+
 
 //************************** */
 import { fileURLToPath } from 'url';
@@ -21,6 +24,7 @@ app.use(express.json()); // este me ayuda a convertir los datos de postman a obj
 app.use(express.urlencoded({ extended: true }))
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
+app.use("/", viewsRouter)
 
 //inicializamos el handlebars y direccionamos views
 app.engine('handlebars', handlebars.engine());
