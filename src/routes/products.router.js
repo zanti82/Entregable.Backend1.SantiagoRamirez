@@ -44,6 +44,9 @@ router.get("/:pid", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const newProduct = await productManager.addProduct(req.body);
+    const products = await productManager.getProducts();
+    const io = req.app.get("io")
+    io.emit("updateProducts", products);
     res.status(201).json(newProduct);
   } catch (error) {
     res.status(400).json({ error: error.message });

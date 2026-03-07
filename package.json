@@ -4,7 +4,8 @@
   "description": "Entrega 1 del proyecto express, donde se programa una API en JS con dos clases ProductManager y CartManager, que nos ayudan a crear un CRUD en un archivo JSON y ver los resultados en POSTMAN",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,10 @@
   },
   "homepage": "https://github.com/zanti82/Entregable.Backend1.SantiagoRamirez#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "express-handlebars": "^8.0.6",
+    "muller": "^1.1.0",
+    "multer": "^2.0.2",
+    "socket.io": "^4.8.3"
   }
 }
