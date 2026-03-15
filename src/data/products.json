@@ -42,5 +42,27 @@
     "stock": 15,
     "category": "jeans",
     "thumbnails": "img3.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Jean Slim cambio recto",
+    "description": "Jean recto slim fit",
+    "code": "JN0033",
+    "price": 100,
+    "status": true,
+    "stock": 15,
+    "category": "jeans",
+    "thumbnails": "img4.jpg"
+  },
+  {
+    "id": 6,
+    "title": "q",
+    "description": "q",
+    "code": "1",
+    "price": 1,
+    "status": true,
+    "stock": 0,
+    "category": "d",
+    "thumbnails": "ee"
   }
 ]

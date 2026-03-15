@@ -6,7 +6,7 @@ import multer from "multer";
 import path from "path";
 import { Server } from "socket.io"
 import viewsRouter from "./routes/views.router.js"
-import productManager from './managers/ProductManager.js';
+import ProductManager from './managers/ProductManager.js';
 
 
 
@@ -18,12 +18,22 @@ import { dirname } from 'path';
 //  */
 const app = express();
 const PORT = 8080;
+const productManager = new ProductManager('./src/data/products.json');
 
 app.use(express.json()); // este me ayuda a convertir los datos de postman a objetos.
 app.use(express.urlencoded({ extended: true }))
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter)
+app.use((req, res, next) => {
+  req.productManager = productManager;
+  next();
+});
+
+// Servir archivos estáticos desde la carpeta 'public'
+app.use(express.static('public'));
+// También sirve uploads si lo necesitas
+app.use('/uploads', express.static('uploads'));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -73,8 +83,8 @@ app.get('/', async(req, res)=>{
 );
 
 
-const server = app.listen(8080, () => {
-  console.log("Servidor en puerto 8080")
+const server = app.listen(PORT, () => {
+  console.log(`"Servidor en puerto ${PORT}`)
 });
 
 //configuramos el socket
@@ -89,22 +99,39 @@ app.set("productManager", productManager);
 //escuchamos las conexiones
 
 io.on("connection", async (socket) => {
+  console.log("🟢 Cliente conectado:", socket.id);
 
-  console.log("Cliente conectado")
-
-  
-    // Enviar productos al cliente cuando se conecta
+  // Enviar productos al cliente cuando se conecta
+  try {
     const products = await productManager.getProducts();
+    console.log(`📦 Enviando ${products.length} productos a ${socket.id}`);
     socket.emit("updateProducts", products);
-  
-   socket.on("newProduct", async (product) => {
+  } catch (error) {
+    console.error("❌ Error al obtener productos:", error);
+  }
 
-    const newProduct = await productManager.addProduct(product)
-
-    const products = await productManager.getProducts()
-
-    io.emit("updateProducts", products)
+  socket.on("newProduct", async (product) => {
+    console.log("📤 Recibido nuevo producto de", socket.id, product);
     
+    try {
+      // Agregar el producto
+      const newProduct = await productManager.addProduct(product);
+      console.log("✅ Producto agregado:", newProduct);
+      
+      // Obtener todos los productos actualizados
+      const products = await productManager.getProducts();
+      console.log(`📢 Emitiendo ${products.length} productos a todos los clientes`);
+      
+      // Emitir a TODOS (incluyendo el que envió)
+      io.emit("updateProducts", products);
+      
+    } catch (error) {
+      console.error("❌ Error al agregar producto:", error);
+      socket.emit("error", error.message);
+    }
+  });
 
+  socket.on("disconnect", () => {
+    console.log("🔴 Cliente desconectado:", socket.id);
+  });
 });
-})

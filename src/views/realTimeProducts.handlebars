@@ -13,20 +13,131 @@
     <h2>Agregar producto</h2>
 
     <form id="productForm">
-
-    <input type="text" name="title" placeholder="title">
-    <input type="text" name="description" placeholder="description">
-    <input type="text" name="code" placeholder="code">
-    <input type="number" name="price" placeholder="price">
-    <input type="number" name="stock" placeholder="stock">
-    <input type="text" name="category" placeholder="category">
-
-    <button type="submit">Agregar</button>
-
+    <input type="text" id="title" placeholder="Título" required>
+    <input type="text" id="description" placeholder="Descripción" required>
+    <input type="number" id="price" placeholder="Precio" required>
+    <input type="text" id="code" placeholder="Código" required>
+    <input type="checkbox" id="status" checked> Activo
+    <input type="number" id="stock" placeholder="Stock" value="0">
+    <input type="text" id="category" placeholder="Categoría" required>
+    <input type="text" id="thumbnails" placeholder="Imagen (opcional)">
+    <button type="submit">Agregar Producto</button>
     </form>
 
+    <div id="productsContainer">
+        {{#each products}}
+        <div>
+            <h3>{{this.title}}</h3>
+            <p>${{this.price}}</p>
+        </div>
+        {{/each}}
+    </div>
+
+        <script src="/socket.io/socket.io.js"></script>
+
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/realtime.js"></script>
-</form>
+<script>
+    console.log("🚀 Script inline cargado");
+    
+    const socket = io();
+    
+    socket.on('connect', () => {
+        console.log('✅ Conectado al servidor');
+    });
+
+    // ESPERAR a que el DOM esté completamente cargado
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("📄 DOM completamente cargado");
+        
+        // Buscar el formulario
+        const form = document.getElementById('productForm');
+        console.log("🔍 Formulario encontrado:", form);
+        
+        if (form) {
+            // Agregar el evento submit
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();  // Prevenir envío tradicional
+                console.log("🎯 SUBMIT CAPTURADO!");
+                
+                // Obtener valores
+                const title = document.getElementById('title')?.value;
+                const description = document.getElementById('description')?.value;
+                const price = document.getElementById('price')?.value;
+                const code = document.getElementById('code')?.value;
+                const stock = document.getElementById('stock')?.value;
+                const category = document.getElementById('category')?.value;
+                const thumbnails = document.getElementById('thumbnails')?.value;
+                const status = document.getElementById('status')?.checked;
+                
+                console.log("📝 Valores del formulario:", {
+                    title, description, price, code, stock, category, thumbnails, status
+                });
+                
+                // Crear objeto producto
+                const product = {
+                    title: title,
+                    description: description || '',
+                    price: parseFloat(price) || 0,
+                    code: code,
+                    stock: parseInt(stock) || 0,
+                    category: category,
+                    thumbnails: thumbnails || '',
+                    status: status !== undefined ? status : true
+                };
+                
+                console.log("📤 Enviando producto al servidor:", product);
+                
+                // Enviar por socket
+                socket.emit('newProduct', product);
+                
+                // Limpiar formulario
+                this.reset();
+                if (document.getElementById('status')) {
+                    document.getElementById('status').checked = true;
+                }
+            });
+            
+            console.log("✅ Evento submit agregado al formulario");
+        } else {
+            console.error("❌ No se encontró el formulario con id='productForm'");
+        }
+    });
+
+    // Escuchar actualizaciones
+    socket.on('updateProducts', (products) => {
+        console.log("📦 Productos actualizados recibidos:", products);
+        
+        const container = document.getElementById('productsContainer');
+        if (container) {
+            container.innerHTML = '';
+            
+            if (products.length === 0) {
+                container.innerHTML = '<p>No hay productos disponibles</p>';
+                return;
+            }
+            
+            products.forEach(product => {
+                const div = document.createElement('div');
+                div.style.border = '1px solid #ddd';
+                div.style.padding = '10px';
+                div.style.margin = '10px 0';
+                div.innerHTML = `
+                    <h3>${product.title}</h3>
+                    <p>Precio: $${product.price}</p>
+                    <p>Stock: ${product.stock}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+    });
+
+    socket.on('error', (error) => {
+        console.error("❌ Error del servidor:", error);
+    });
+</script>
+
+
+   
+
 </body>
 </html>
