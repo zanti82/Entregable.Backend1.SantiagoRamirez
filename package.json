@@ -1,11 +1,12 @@
+
 {
   "name": "entregable.backend1.santiagoramirez",
   "version": "1.0.0",
-  "description": "Entrega 1 del proyecto express, donde se programa una API en JS con dos clases ProductManager y CartManager, que nos ayudan a crear un CRUD en un archivo JSON y ver los resultados en POSTMAN",
+  "description": "Entrega 2 del proyecto express, donde se programa una API en JS con dos clases ProductManager y CartManager, que nos ayudan a crear un CRUD en un archivo JSON y ver los resultados en POSTMAN",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node src/app.js"
   },
   "repository": {
     "type": "git",

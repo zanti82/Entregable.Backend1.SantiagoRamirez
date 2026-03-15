@@ -30,7 +30,7 @@
     "status": true,
     "stock": 15,
     "category": "jeans",
-    "thumbnails": "img1.jpg"
+    "thumbnails": "img2.jpg"
   },
   {
     "id": 4,
@@ -41,6 +41,6 @@
     "status": true,
     "stock": 15,
     "category": "jeans",
-    "thumbnails": "img1.jpg"
+    "thumbnails": "img3.jpg"
   }
 ]

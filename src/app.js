@@ -6,6 +6,7 @@ import multer from "multer";
 import path from "path";
 import { Server } from "socket.io"
 import viewsRouter from "./routes/views.router.js"
+import productManager from './managers/ProductManager.js';
 
 
 
@@ -13,8 +14,6 @@ import viewsRouter from "./routes/views.router.js"
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 //**********************
 //  */
 const app = express();
@@ -25,6 +24,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter)
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 //inicializamos el handlebars y direccionamos views
 app.engine('handlebars', handlebars.engine());
@@ -50,13 +52,23 @@ app.post('/uploads', upload.single('file'), (req,res)=>{
 } 
 );
 
-app.get('/', (req, res)=>{
+app.get('/', async(req, res)=>{
 
-  let tetsUser = {
-    name : 'Coder',
-    team : 'senior developer'
-  }
-  res.render('index', tetsUser);
+  try {
+    // Obtenemos los productos del archivo
+    const products = await productManager.getProducts();
+    
+    let testUser = {
+        name: 'Coder',
+        team: 'senior developer',
+        products: products // Pasamos los productos a la vista
+    };
+    
+    res.render('index', testUser);
+} catch (error) {
+    res.status(500).send('Error al cargar los productos');
+
+}
 }
 );
 
@@ -70,11 +82,20 @@ const io = new Server(server);
 
 app.set("io", io)
 
+// Hacemos que productManager sea accesible para los sockets
+app.set("productManager", productManager);
+
+
 //escuchamos las conexiones
 
 io.on("connection", async (socket) => {
 
   console.log("Cliente conectado")
+
+  
+    // Enviar productos al cliente cuando se conecta
+    const products = await productManager.getProducts();
+    socket.emit("updateProducts", products);
   
    socket.on("newProduct", async (product) => {
 

@@ -4,17 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>home</title>
+    <style>
+        .producto-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            width: 250px;
+        }
+        .producto-card img {
+            max-width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .producto-imagen {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .sin-imagen {
+            width: 100%;
+            height: 150px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    
     <h1>Lista de productos</h1>
 
-    <ul>
-    {{#each products}}
-    <li>{{this.title}} - {{this.price}}</li>
-    {{/each}}
-    </ul>
-
-   
+    <div class="productos-container">
+        {{#each products}}
+        <div class="producto-card">
+            <div class="producto-imagen">
+                {{#if this.thumbnails}}
+                    {{#if (isArray this.thumbnails)}}
+                        <!-- Si thumbnails es un array, tomamos la primera imagen -->
+                        <img src="/uploads/{{this.thumbnails.[0]}}" alt="{{this.title}}">
+                    {{else}}
+                        <!-- Si thumbnails es un string (como en tu caso) -->
+                        <img src="/uploads/{{this.thumbnails}}" alt="{{this.title}}">
+                    {{/if}}
+                {{else}}
+                    <div class="sin-imagen">Sin imagen</div>
+                {{/if}}
+            </div>
+            <h3>{{this.title}}</h3>
+            <p>{{this.description}}</p>
+            <p><strong>Precio:</strong> ${{this.price}}</p>
+            <p><strong>Código:</strong> {{this.code}}</p>
+            <p><strong>Stock:</strong> {{this.stock}}</p>
+            <p><strong>Categoría:</strong> {{this.category}}</p>
+        </div>
+        {{/each}}
+    </div>
 </body>
 </html>
+
