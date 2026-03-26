@@ -1,8 +1,7 @@
-
 {
   "name": "entregable.backend1.santiagoramirez",
   "version": "1.0.0",
-  "description": "Entrega 2 del proyecto express, donde se programa una API en JS con dos clases ProductManager y CartManager, que nos ayudan a crear un CRUD en un archivo JSON y ver los resultados en POSTMAN",
+  "description": "Entrega 3 con mongodb del proyecto express, donde se programa una API en JS con dos clases ProductManager y CartManager, que nos ayudan a crear un CRUD en un archivo JSON y ver los resultados en POSTMAN",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -23,6 +22,8 @@
   "dependencies": {
     "express": "^5.2.1",
     "express-handlebars": "^8.0.6",
+    "mongoose": "^9.3.3",
+    "mongoose-paginate-v2": "^1.9.4",
     "muller": "^1.1.0",
     "multer": "^2.0.2",
     "socket.io": "^4.8.3"

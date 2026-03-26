@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>home</title>
+    <title>Productos</title>
     <style>
         .productos-container {
             display: grid;
@@ -16,63 +16,95 @@
             border-radius: 8px;
             padding: 15px;
             background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .producto-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            border-radius: 4px;
-        }
-        .producto-card h3 {
-            margin: 10px 0 5px;
-            color: #333;
-        }
-        .producto-card p {
-            margin: 5px 0;
-            color: #666;
         }
         .precio {
             font-weight: bold;
-            color: #4CAF50;
-            font-size: 1.2em;
+            color: green;
         }
         .sin-imagen {
             width: 100%;
             height: 200px;
-            background: #f0f0f0;
+            background: #eee;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #999;
-            border-radius: 4px;
+        }
+        .acciones {
+            margin-top: 10px;
+        }
+        button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>Lista de productos</h1>
 
-    <div class="productos-container">
-        {{#each products}}
-        <div class="producto-card">
-            {{#if this.thumbnails}}
-                <!-- Si tiene imagen, la mostramos -->
-                <img src="/uploads/{{this.thumbnails}}" alt="{{this.title}}">
-            {{else}}
-                <!-- Si no tiene imagen, mostramos un placeholder -->
-                <div class="sin-imagen">
-                    📷 Sin imagen
-                </div>
-            {{/if}}
-            
-            <h3>{{this.title}}</h3>
-            <p>{{this.description}}</p>
-            <p class="precio">${{this.price}}</p>
-            <p>📦 Stock: {{this.stock}}</p>
-            <p>🏷️ Código: {{this.code}}</p>
-            <p>📁 Categoría: {{this.category}}</p>
+<h1>Lista de productos</h1>
+
+<div class="productos-container">
+    {{#each products}}
+    <div class="producto-card">
+
+        {{#if this.thumbnails}}
+            <img src="/uploads/{{this.thumbnails}}" alt="{{this.title}}">
+        {{else}}
+            <div class="sin-imagen">Sin imagen</div>
+        {{/if}}
+
+        <h3>{{this.title}}</h3>
+        <p>{{this.description}}</p>
+        <p class="precio">${{this.price}}</p>
+        <p>Stock: {{this.stock}}</p>
+        <p>Categoría: {{this.category}}</p>
+
+        <div class="acciones">
+            <a href="/products/{{this._id}}">
+                <button>Ver detalle</button>
+            </a>
+
+            <button onclick="addToCart('{{this._id}}')">
+                Agregar al carrito
+            </button>
         </div>
-        {{/each}}
+
     </div>
+    {{/each}}
+</div>
+
+<!-- PAGINACIÓN -->
+<div style="text-align:center; margin:20px;">
+    
+    {{#if hasPrevPage}}
+        <a href="/products?page={{prevPage}}">Anterior</a>
+    {{/if}}
+
+    <span>Página {{page}} de {{totalPages}}</span>
+
+    {{#if hasNextPage}}
+        <a href="/products?page={{nextPage}}">Siguiente</a>
+    {{/if}}
+
+</div>
+
+<script>
+function addToCart(pid) {
+    const cartId = "ID_DEL_CARRITO"; // reemplazar
+
+    fetch(`/api/carts/${cartId}/products/${pid}`, {
+        method: "POST"
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
+    .catch(err => console.log(err));
+}
+</script>
+
 </body>
 </html>

@@ -1,61 +1,150 @@
 import { Router } from "express";
-import CartManager from "../managers/CartManager.js";
+import CartModel from "../models/Cart.model.js";
 
 const router = Router();
-const cartManager = new CartManager("./data/carts.json");
-
 
 /*
-POST crear cart
+POST crear carrito
 */
 router.post("/", async (req, res) => {
-    try {
-      const newCart = await cartManager.crearCart(req.body);
-      res.status(201).json(newCart);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  });
+  try {
+    const newCart = await CartModel.create({ products: [] });
+    res.status(201).json(newCart);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-
-  /*
-PUT adicionar producto al cart
+/*
+GET carrito con populate
 */
-router.put("/:cartID/products/:pId", async (req, res) => {
+router.get("/:cid", async (req, res) => {
+  try {
+    const cart = await CartModel.findById(req.params.cid)
+      .populate("products.product");
 
-
-    try {
-      const { cartID, pId } = req.params;
-      const { quantity } = req.body;
-
-      const updatedCart = await cartManager.addProductsCart(Number(cartID), pId,quantity);
-      res.status(200).json(updatedCart);
-
-      console.log(updatedCart)
-      
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+    if (!cart) {
+      return res.status(404).json({ error: "Carrito no encontrado" });
     }
-  });
 
+    res.json(cart);
 
-  /*
-  GET cart por idCart
- */
-router.get("/:idCart", async (req, res) => {
-    const idCart = Number(req.params.idCart);
-  
-    try {
-      const cart = await cartManager.getCart(idCart);
-  
-      if (!cart) {
-        return res.status(404).json({ error: "carrito no encontrado" });
-      }
-  
-      res.status(200).json(cart);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/*
+POST agregar producto al carrito
+*/
+router.post("/:cid/products/:pid", async (req, res) => {
+  try {
+    const cart = await CartModel.findById(req.params.cid);
+
+    const productInCart = cart.products.find(
+      p => p.product.toString() === req.params.pid
+    );
+
+    if (productInCart) {
+      productInCart.quantity++;
+    } else {
+      cart.products.push({
+        product: req.params.pid,
+        quantity: 1
+      });
     }
-  });
 
-  export default router;
+    await cart.save();
+
+    res.json(cart);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/*
+PUT actualizar TODO el carrito
+*/
+router.put("/:cid", async (req, res) => {
+  try {
+    const { products } = req.body;
+
+    const cart = await CartModel.findByIdAndUpdate(
+      req.params.cid,
+      { products },
+      { new: true }
+    );
+
+    res.json(cart);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/*
+PUT actualizar cantidad de producto
+*/
+router.put("/:cid/products/:pid", async (req, res) => {
+  try {
+    const { quantity } = req.body;
+
+    const cart = await CartModel.findById(req.params.cid);
+
+    const product = cart.products.find(
+      p => p.product.toString() === req.params.pid
+    );
+
+    if (product) {
+      product.quantity = quantity;
+    }
+
+    await cart.save();
+
+    res.json(cart);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/*
+DELETE eliminar producto del carrito
+*/
+router.delete("/:cid/products/:pid", async (req, res) => {
+  try {
+    const cart = await CartModel.findById(req.params.cid);
+
+    cart.products = cart.products.filter(
+      p => p.product.toString() !== req.params.pid
+    );
+
+    await cart.save();
+
+    res.json(cart);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/*
+DELETE vaciar carrito
+*/
+router.delete("/:cid", async (req, res) => {
+  try {
+    const cart = await CartModel.findById(req.params.cid);
+
+    cart.products = [];
+
+    await cart.save();
+
+    res.json(cart);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+export default router;

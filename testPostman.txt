@@ -7,3 +7,10 @@
   "stock": 15,
   "category": "jeans",
   "thumbnails": "img1.jpg"
+
+
+http://localhost:8080/products
+
+http://localhost:8080/products/:69c5b8d272cd0cdcb0a8c766
+
+http://localhost:8080/api/carts/69c5b9fd72cd0cdcb0a8c772
